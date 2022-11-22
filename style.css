@@ -19,16 +19,36 @@ body{
     overflow: hidden;
 }
 
-#gallery img{
-    object-fit: cover;
-    object-position: center;
+#gallery > div{
     display: none;
 
     width: 800px;
     height: 300px;
+
+    position: relative;
+    color: white;
+    text-align: right;
 }
 #gallery .active{
     display: block;
+}
+
+#gallery img{
+    object-fit: cover;
+    object-position: center;
+
+    width: 800px;
+    height: 300px;
+}
+
+#gallery .caption{
+    position: absolute; 
+    bottom: 1rem;
+    right: 10px;
+    width: 50%;
+    padding: 8px;
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 #thumbs{

@@ -4,35 +4,49 @@ const thumbsElement = document.getElementById("thumbs");
 const inputUp = document.getElementById("input-up");
 const inputDown = document.getElementById("input-down");
 
-// Gallery setup
-const nOfImages = 5;
-const gallery = [
-    "01.webp",
-    "02.webp",
-    "03.webp",
-    "04.webp",
-    "05.webp",
-];
+// Gallery data
+const gallery = [{ image: 'img/01.webp', title: 'Marvel\'s Spiderman Miles Morale', text: 'Experience the rise of Miles Morales as the new hero masters incredible, explosive new powers to become his own Spider-Man.', }, { image: 'img/02.webp', title: 'Ratchet & Clank: Rift Apart', text: 'Go dimension-hopping with Ratchet and Clank as they take on an evil emperor from another reality.', }, { image: 'img/03.webp', title: 'Fortnite', text: "Grab all of your friends and drop into Epic Games Fortnite, a massive 100 - player face - off that combines looting, crafting, shootouts and chaos.", }, { image: 'img/04.webp', title: 'Stray', text: 'Lost, injured and alone, a stray cat must untangle an ancient mystery to escape a long-forgotten city', }, { image: 'img/05.webp', title: "Marvel's Avengers", text: 'Marvel\'s Avengers is an epic, third-person, action-adventure game that combines an original, cinematic story with single-player and co-operative gameplay.', }];
 const thumbs = [];
 
-// Active item
-let activeImage = 0;
+// Gallery configuration
+let activeItem = 0;
 
 // Build gallery
-for (let i = 0; i < nOfImages; i++) {
+for (let i = 0; i < gallery.length; i++) {
+
+    // Create container div
+    const itemElement = document.createElement("div");
+
+    // Link gallery active element to activeImage
+    if (i == activeItem) {
+        itemElement.classList.add("active");
+    }
 
     // Create image element
     const image = document.createElement("img");
-    image.src = `img/${gallery[i]}`;
+    image.src = gallery[i].image;
 
-    // Link gallery active element to activeImage
-    if (i == activeImage) {
-        image.classList.add("active");
-    }
+    // Create caption div
+    const caption = document.createElement("div");
+    caption.classList.add("caption");
 
-    // Add image to galleries
-    galleryElement.append(image);
-    gallery[i] = image;
+    // Create title
+    const title = document.createElement("h3");
+    title.innerHTML = gallery[i].title;
+
+    // Create text
+    const text = document.createElement("p");
+    text.innerHTML = gallery[i].text;
+    
+    // Build final element
+    caption.append(title);
+    caption.append(text);
+    itemElement.append(image);
+    itemElement.append(caption);
+
+    // Add container to galleries
+    galleryElement.append(itemElement);
+    gallery[i] = itemElement;
 
     // Add image to thumbnails
     let imageClone = image.cloneNode();
@@ -44,39 +58,39 @@ for (let i = 0; i < nOfImages; i++) {
 inputUp.addEventListener("click", function () {
 
     // Hide old active image
-    gallery[activeImage].classList.remove("active");
-    thumbs[activeImage].classList.remove("active");
+    gallery[activeItem].classList.remove("active");
+    thumbs[activeItem].classList.remove("active");
 
     // Check for images on right
-    if (activeImage == gallery.length - 1) {
+    if (activeItem == gallery.length - 1) {
         // no more images on right
-        activeImage = 0;
+        activeItem = 0;
     } else {
-        activeImage++;
+        activeItem++;
     }
 
     // Dispay new active image
-    gallery[activeImage].classList.add("active");
-    thumbs[activeImage].classList.add("active");
+    gallery[activeItem].classList.add("active");
+    thumbs[activeItem].classList.add("active");
 
 });
 inputDown.addEventListener("click", function () {
 
     // Hide old active image
-    gallery[activeImage].classList.remove("active");
-    thumbs[activeImage].classList.remove("active");
+    gallery[activeItem].classList.remove("active");
+    thumbs[activeItem].classList.remove("active");
 
     // Check for images on right
-    if (activeImage == 0) {
+    if (activeItem == 0) {
         // no more images on right
-        activeImage = gallery.length - 1;
+        activeItem = gallery.length - 1;
     } else {
-        activeImage--;
+        activeItem--;
     }
 
     // Dispay new active image
-    gallery[activeImage].classList.add("active");
-    thumbs[activeImage].classList.add("active");
+    gallery[activeItem].classList.add("active");
+    thumbs[activeItem].classList.add("active");
 
 });
 
