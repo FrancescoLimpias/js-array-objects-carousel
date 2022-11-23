@@ -4,27 +4,27 @@ const thumbsElement = document.getElementById("thumbs");
 const inputUp = document.getElementById("input-up");
 const inputDown = document.getElementById("input-down");
 
+// Listen for clicks
+inputUp.addEventListener("click", activeNextItem);
+inputDown.addEventListener("click", activePreviousItem);
+
 // Gallery data
-const gallery = [{ image: 'img/01.webp', title: 'Marvel\'s Spiderman Miles Morale', text: 'Experience the rise of Miles Morales as the new hero masters incredible, explosive new powers to become his own Spider-Man.', }, { image: 'img/02.webp', title: 'Ratchet & Clank: Rift Apart', text: 'Go dimension-hopping with Ratchet and Clank as they take on an evil emperor from another reality.', }, { image: 'img/03.webp', title: 'Fortnite', text: "Grab all of your friends and drop into Epic Games Fortnite, a massive 100 - player face - off that combines looting, crafting, shootouts and chaos.", }, { image: 'img/04.webp', title: 'Stray', text: 'Lost, injured and alone, a stray cat must untangle an ancient mystery to escape a long-forgotten city', }, { image: 'img/05.webp', title: "Marvel's Avengers", text: 'Marvel\'s Avengers is an epic, third-person, action-adventure game that combines an original, cinematic story with single-player and co-operative gameplay.', }];
-const thumbs = [];
+let gallery = [{ image: 'img/01.webp', title: 'Marvel\'s Spiderman Miles Morale', text: 'Experience the rise of Miles Morales as the new hero masters incredible, explosive new powers to become his own Spider-Man.', }, { image: 'img/02.webp', title: 'Ratchet & Clank: Rift Apart', text: 'Go dimension-hopping with Ratchet and Clank as they take on an evil emperor from another reality.', }, { image: 'img/03.webp', title: 'Fortnite', text: "Grab all of your friends and drop into Epic Games Fortnite, a massive 100 - player face - off that combines looting, crafting, shootouts and chaos.", }, { image: 'img/04.webp', title: 'Stray', text: 'Lost, injured and alone, a stray cat must untangle an ancient mystery to escape a long-forgotten city', }, { image: 'img/05.webp', title: "Marvel's Avengers", text: 'Marvel\'s Avengers is an epic, third-person, action-adventure game that combines an original, cinematic story with single-player and co-operative gameplay.', }];
+let thumbs = [];
 
 // Gallery configuration
 let activeItem = 0;
 
 // Build gallery
-for (let i = 0; i < gallery.length; i++) {
+gallery = gallery.map((item, index) => {
 
+    // ITEM ELEMENT
     // Create container div
     const itemElement = document.createElement("div");
 
-    // Link gallery active element to activeImage
-    if (i == activeItem) {
-        itemElement.classList.add("active");
-    }
-
     // Create image element
     const image = document.createElement("img");
-    image.src = gallery[i].image;
+    image.src = item.image;
 
     // Create caption div
     const caption = document.createElement("div");
@@ -32,65 +32,76 @@ for (let i = 0; i < gallery.length; i++) {
 
     // Create title
     const title = document.createElement("h3");
-    title.innerHTML = gallery[i].title;
+    title.innerHTML = item.title;
 
     // Create text
     const text = document.createElement("p");
-    text.innerHTML = gallery[i].text;
-    
-    // Build final element
-    caption.append(title);
-    caption.append(text);
-    itemElement.append(image);
-    itemElement.append(caption);
+    text.innerHTML = item.text;
 
-    // Add container to galleries
+    // Build final itemElement
+    caption.append(title, text);
+    itemElement.append(image, caption);
+
+    // THUMBNAIL
+    // Create thumbnail
+    let thumb = image.cloneNode();
+    thumb.addEventListener("click", () => selectActiveItem(index));
+
+    // APPEND TO DOM
+    // Check for element activation
+    if (index == activeItem) {
+        itemElement.classList.add("active");
+        thumb.classList.add("active");
+    }
+
+    // Add itemElement and thumbnail to DOM
     galleryElement.append(itemElement);
-    gallery[i] = itemElement;
+    thumbsElement.prepend(thumb);
 
-    // Add image to thumbnails
-    let imageClone = image.cloneNode();
-    thumbsElement.prepend(imageClone);
-    thumbs.push(imageClone)
-}
+    // Add itemElement and thumbnail to their arrays
+    thumbs.push(thumb);
+    return itemElement;
+});
 
-// Listen for clicks
-inputUp.addEventListener("click", function () {
+// Select the new active item
+function selectActiveItem(newActiveItem) {
 
     // Hide old active image
     gallery[activeItem].classList.remove("active");
     thumbs[activeItem].classList.remove("active");
+
+    // Dispay new active image
+    gallery[newActiveItem].classList.add("active");
+    thumbs[newActiveItem].classList.add("active");
+
+    // Assign new active item
+    activeItem = newActiveItem;
+
+}
+
+// Go to the next active item
+function activeNextItem() {
 
     // Check for images on right
     if (activeItem == gallery.length - 1) {
         // no more images on right
-        activeItem = 0;
+        selectActiveItem(0);
     } else {
-        activeItem++;
+        selectActiveItem(activeItem + 1);
     }
 
-    // Dispay new active image
-    gallery[activeItem].classList.add("active");
-    thumbs[activeItem].classList.add("active");
+}
 
-});
-inputDown.addEventListener("click", function () {
-
-    // Hide old active image
-    gallery[activeItem].classList.remove("active");
-    thumbs[activeItem].classList.remove("active");
+function activePreviousItem() {
 
     // Check for images on right
     if (activeItem == 0) {
         // no more images on right
-        activeItem = gallery.length - 1;
+        selectActiveItem(gallery.length - 1)
     } else {
-        activeItem--;
+        selectActiveItem(activeItem - 1);
     }
 
-    // Dispay new active image
-    gallery[activeItem].classList.add("active");
-    thumbs[activeItem].classList.add("active");
+}
 
-});
 

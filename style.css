@@ -12,6 +12,12 @@ body{
     align-items: center;
 }
 
+#carousel{
+    border-radius: 15px;
+    overflow: hidden;
+    display: flex;
+}
+
 #gallery{
     width: 800px;
     height: 300px;
